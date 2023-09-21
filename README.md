@@ -17,9 +17,7 @@ pip install -r requirements.txt
 启动服务：
 
 ```shell
-uvicorn main:app --reload \
-    --host 0.0.0.0 \
-    --port 10102
+uvicorn main:app --reload --host 127.0.0.1 --port 10102
 ```
 
 如果增加了新的依赖，生成requirements.txt：
