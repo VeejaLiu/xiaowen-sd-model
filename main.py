@@ -37,6 +37,7 @@ class DrawRequest(BaseModel):
 async def draw(body: DrawRequest = None):
     logging.info(f"""[/draw]""")
     image_path = draw_with_prompt(body.prompt)
+    # image_path = 'src/service/result/image.jpg'
     return FileResponse(image_path)
 
 
