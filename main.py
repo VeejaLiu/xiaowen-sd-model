@@ -1,8 +1,12 @@
+import logging
+
 import uvicorn
 
 from fastapi import FastAPI
 from pydantic import BaseModel
 from starlette.responses import FileResponse
+
+from src.service.stable_diffusion_service import draw_with_prompt
 
 app = FastAPI()
 
@@ -14,14 +18,14 @@ async def root():
 
 # Health Check
 @app.get("/health_check")
-async def health_get():
+async def health_check():
     return {"message": "OK"}
 
 
-# POST health check, Get the body
+# POST health check
 @app.post("/health_check")
-async def health_post(body=None):
-    return {"message": f"OK {body}"}
+async def health_check(body=None):
+    return {"message": "OK", "body": body}
 
 
 class DrawRequest(BaseModel):
@@ -31,8 +35,9 @@ class DrawRequest(BaseModel):
 # draw an image
 @app.post("/draw")
 async def draw(body: DrawRequest = None):
-    print(f"""[/draw] {body}""")
-    some_file_path = "Cat.jpg"
-    return FileResponse(some_file_path)
+    logging.info(f"""[/draw]""")
+    image_path = draw_with_prompt(body.prompt)
+    return FileResponse(image_path)
+
 
 uvicorn.run(app, host="127.0.0.1", port=10102)
