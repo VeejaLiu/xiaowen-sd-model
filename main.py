@@ -1,6 +1,8 @@
+import uvicorn
+
 from fastapi import FastAPI
 from pydantic import BaseModel
-from uvicorn import logging
+from starlette.responses import FileResponse
 
 app = FastAPI()
 
@@ -30,4 +32,7 @@ class DrawRequest(BaseModel):
 @app.post("/draw")
 async def draw(body: DrawRequest = None):
     print(f"""[/draw] {body}""")
-    return {"message": f"OK {body}"}
+    some_file_path = "Cat.jpg"
+    return FileResponse(some_file_path)
+
+uvicorn.run(app, host="127.0.0.1", port=10102)
