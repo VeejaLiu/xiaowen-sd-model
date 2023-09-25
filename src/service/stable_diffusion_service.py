@@ -11,7 +11,7 @@ print(os.get_exec_path())
 pipe = StableDiffusionPipeline.from_single_file(
     """src//service//models//v2-1_768-ema-pruned.ckpt""",
     transformers=[
-      torchvision.transforms.Resize(512),
+        torchvision.transforms.Resize(512),
     ],
     cache_dir='./models/')
 pipe = pipe.to("cuda")
@@ -45,6 +45,12 @@ prefix_prompt = [
 
 prefix_prompt_str = ", ".join(prefix_prompt)
 
+negative_prompt = [
+    'Colorful tattoo design',
+]
+
+negative_prompt_str = ", ".join(negative_prompt)
+
 
 def draw_with_prompt(prompt: str = ""):
     prompt = prompt.strip()
@@ -58,10 +64,31 @@ def draw_with_prompt(prompt: str = ""):
     prompt = f"{prompt}, {prefix_prompt_str}"
     print(f"[draw_with_prompt] Final prompt: '{prompt}'.")
     start_time = datetime.now()
+
+    # prompt: 输入的文本提示,控制生成图像的主题和内容。
+    # height: 生成图像的高度大小。
+    # width: 生成图像的宽度大小。设置height和width可以控制输出图像的尺寸。
+    # num_inference_steps: 生成图像的迭代次数,越大图像会越精细清晰,但耗时也更长。通常50步已经足够好。
+    # guidance_scale: 控制生成图像时引导损失的影响力量。数值越大,图像会越趋近于prompt指定的样式,但写实程度可能降低。
+    # negative_prompt: 介绍负面prompt来减弱某些不希望出现的特征。
+    # num_images_per_prompt: 每个prompt生成的图像数量。
+    # eta:控制先验噪声和输入文本特征的融合比例。
+    # generator:Torch随机数生成器,控制生成过程的随机性。
+    # latents:提供噪声输入来引导生成。
+    # prompt_embeds:将prompt嵌入为张量,提供给模型。
+    # negative_prompt_embeds:将负面prompt嵌入为张量。
+    # output_type:输出图像的格式,如PIL或者ndarray。
+    # return_dict:是否以字典形式返回额外信息。
+    # callback:每次迭代的回调函数,用于实时监控生成过程。
+    # callback_steps:设置回调函数调用间隔。
+    # cross_attention_kwargs:控制交叉注意力机制的超参数。
+    # guidance_rescale:重新缩放损失函数以控制稳定性。
     images = pipe(
         prompt=prompt,
+        negative_prompt=negative_prompt_str,
         height=512,
         width=512,
+        # guidance_scale=guidance_scale,
         # num_inference_steps=100,
     ).images
     image = images[0]
