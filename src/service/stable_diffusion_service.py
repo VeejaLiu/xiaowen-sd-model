@@ -20,9 +20,40 @@ pipe = pipe.to("cuda")
 # pipe.enable_attention_slicing()
 
 
-def draw_with_prompt(prompt="A painting of a cat"):
-    print(f"[draw_with_prompt] prompt: '{prompt}'")
+prefix_prompt = [
+    'Black and white tattoo design',
+    'Monochromatic tattoo concept',
+    'Tattoo stencil idea',
+    'Ink-only tattoo sketch',
+    'Clean and crisp tattoo outline',
+    # 'Minimalistic tattoo artwork',
+    # 'Geometric tattoo pattern',
+    # 'Abstract tattoo proposal',
+    # 'Sharp and defined tattoo image',
+    # 'Bold tattoo design',
+    # 'Intricate linework for tattoo',
+    # 'Symmetrical tattoo draft',
+    # 'Tribal tattoo inspiration',
+    # 'Japanese-style tattoo concept',
+    # 'Celtic knotwork tattoo idea',
+    # 'Tattoo with no gradients',
+    # 'High contrast tattoo sketch',
+    # 'Fine details in tattoo design',
+    # 'Line art for tattoo',
+    # 'Two-dimensional tattoo concept'
+]
+
+prefix_prompt_str = ", ".join(prefix_prompt)
+
+
+def draw_with_prompt(prompt: str = ""):
+    prompt = prompt.strip()
+    if prompt is None or prompt == "":
+        return f"src/service/result/image.jpg"
+    print(f"[draw_with_prompt] prompt: '{prompt}'.")
     prompt = translate(prompt)
+    print(f"[draw_with_prompt] translated prompt: '{prompt}'.")
+    prompt = f"{prefix_prompt_str}, ({prompt}:1.6)"
     start_time = datetime.now()
     images = pipe(
         prompt=prompt,
