@@ -5,6 +5,7 @@ from datetime import datetime
 import torch
 import torchvision
 from diffusers import StableDiffusionPipeline
+from src.client.BaiduTranslator import translate
 
 print(os.get_exec_path())
 pipe = StableDiffusionPipeline.from_single_file(
@@ -20,7 +21,8 @@ pipe = pipe.to("cuda")
 
 
 def draw_with_prompt(prompt="A painting of a cat"):
-    print(f"[draw_with_prompt] prompt: '{prompt}'. Start drawing...")
+    print(f"[draw_with_prompt] prompt: '{prompt}'")
+    prompt = translate(prompt)
     start_time = datetime.now()
     images = pipe(
         prompt=prompt,
