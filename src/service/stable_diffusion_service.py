@@ -1,26 +1,42 @@
 import logging
 import os
 from datetime import datetime
+from compel import Compel
 
 import torch
 import torchvision
 from diffusers import StableDiffusionPipeline
+from diffusers import DPMSolverMultistepScheduler
+
 from src.client.BaiduTranslator import translate
 
 print(os.get_exec_path())
+
+# 加载模型
 pipe = StableDiffusionPipeline.from_single_file(
-    """src//service//models//v2-1_768-ema-pruned.ckpt""",
-    transformers=[
-        torchvision.transforms.Resize(512),
-    ],
+    # """src//service//models//v2-1_768-ema-pruned.ckpt""",
+    """src//service//models//v1-5-pruned-emaonly.safetensors""",
+    # """src//service//models//ghostmix_v20Bakedvae.safetensors""",
+    # transformers=[
+    #     torchvision.transforms.Resize(512),
+    # ],
+    # torch_dtype=torch.float16,
+    load_safety_checker=None,
+    # use_safetensors=False,
     cache_dir='./models/')
+
+# 设置采样方法
+pipe.scheduler = DPMSolverMultistepScheduler.from_config(
+    pipe.scheduler.config
+)
+
+# 使用Compel来处理文本，将文本转换为模型可以理解的张量
+compel = Compel(tokenizer=pipe.tokenizer, text_encoder=pipe.text_encoder)
+
 pipe = pipe.to("cuda")
 
-
-# pipe.enable_attention_slicing()
-
-
 prefix_prompt = [
+    'masterpiece, top quality, best quality',
     'Black and white tattoo design',
     'Monochromatic tattoo concept',
     'Tattoo stencil idea',
@@ -45,14 +61,15 @@ prefix_prompt = [
 
 prefix_prompt_str = ", ".join(prefix_prompt)
 
-negative_prompt = [
-    'Colorful tattoo design',
-]
 
-negative_prompt_str = ", ".join(negative_prompt)
+# negative_prompt = [
+#     'Colorful tattoo design',
+# ]
+
+# negative_prompt_str = ", ".join(negative_prompt)
 
 
-def draw_with_prompt(prompt: str = ""):
+def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
     prompt = prompt.strip()
     if prompt is None or prompt == "":
         print(f"[draw_with_prompt] No prompt provided, return demo image")
@@ -61,9 +78,18 @@ def draw_with_prompt(prompt: str = ""):
     prompt = translate(prompt)
     print(f"[draw_with_prompt] translated prompt: '{prompt}'.")
     # prompt = f"{prefix_prompt_str}, ({prompt}:1.6)"
-    prompt = f"{prompt}, {prefix_prompt_str}"
+    prompt = f"{prompt}+, {prefix_prompt_str}"
     print(f"[draw_with_prompt] Final prompt: '{prompt}'.")
+    print(f"[draw_with_prompt] Final length: {len(prompt)}")
+    print(f"[draw_with_prompt] Final negative prompt: '{negative_prompt}'.")
+    print(f"[draw_with_prompt] Final negative length: {len(negative_prompt)}")
+
+    prompt_embeds = compel(prompt)
+    negative_prompt_embeds = compel(negative_prompt)
+
     start_time = datetime.now()
+
+    generator = torch.Generator(device="cuda").manual_seed(8)
 
     # prompt: 输入的文本提示,控制生成图像的主题和内容。
     # height: 生成图像的高度大小。
@@ -84,12 +110,16 @@ def draw_with_prompt(prompt: str = ""):
     # cross_attention_kwargs:控制交叉注意力机制的超参数。
     # guidance_rescale:重新缩放损失函数以控制稳定性。
     images = pipe(
-        prompt=prompt,
-        negative_prompt=negative_prompt_str,
-        height=512,
-        width=512,
-        # guidance_scale=guidance_scale,
-        # num_inference_steps=100,
+        # prompt=prompt,
+        # negative_prompt=negative_prompt_str,
+        prompt_embeds=prompt_embeds,
+        negative_prompt_embeds=negative_prompt_embeds,
+        # height=768,
+        # width=512,
+        # generator=generator,
+        guidance_scale=7,
+        num_inference_steps=30,
+        num_images_per_prompt=1,
     ).images
     image = images[0]
     end_time = datetime.now()

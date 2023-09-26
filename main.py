@@ -29,14 +29,15 @@ async def health_check(body=None):
 
 
 class DrawRequest(BaseModel):
-    prompt: str
+    prompt: str = None
+    negative_prompt: str = None
 
 
 # draw an image
 @app.post("/draw")
 async def draw(body: DrawRequest = None):
     logging.info(f"""[/draw]""")
-    image_path = draw_with_prompt(body.prompt)
+    image_path = draw_with_prompt(body.prompt, body.negative_prompt)
     # image_path = 'src/service/result/image.jpg'
     return FileResponse(image_path)
 
