@@ -78,7 +78,7 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
     prompt = translate(prompt)
     print(f"[draw_with_prompt] translated prompt: '{prompt}'.")
     # prompt = f"{prefix_prompt_str}, ({prompt}:1.6)"
-    prompt = f"{prompt}+, {prefix_prompt_str}"
+    prompt = f"{prompt}, {prefix_prompt_str}".lower()
     print(f"[draw_with_prompt] Final prompt: '{prompt}'.")
     print(f"[draw_with_prompt] Final length: {len(prompt)}")
     print(f"[draw_with_prompt] Final negative prompt: '{negative_prompt}'.")
