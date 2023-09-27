@@ -70,6 +70,7 @@ prefix_prompt_str = ", ".join(prefix_prompt)
 
 
 def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
+    # Prompt预处理，
     prompt = prompt.strip()
     if prompt is None or prompt == "":
         print(f"[draw_with_prompt] No prompt provided, return demo image")
@@ -84,11 +85,13 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
     print(f"[draw_with_prompt] Final negative prompt: '{negative_prompt}'.")
     print(f"[draw_with_prompt] Final negative length: {len(negative_prompt)}")
 
+    # 将文本转换为张量，便于输入长文本
     prompt_embeds = compel(prompt)
     negative_prompt_embeds = compel(negative_prompt)
 
     start_time = datetime.now()
 
+    # generator 的作用是控制生成过程的随机性
     generator = torch.Generator(device="cuda").manual_seed(8)
 
     # prompt: 输入的文本提示,控制生成图像的主题和内容。
@@ -124,6 +127,8 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
     image = images[0]
     end_time = datetime.now()
     print(f"[draw_with_prompt] Done drawing. Elapsed time: {end_time - start_time}")
+
+    # 保存图像，添加时间戳，返回图像路径
     image_path = f"src/service/result/image_{datetime.now().timestamp()}.png"
     # save image, add timestamp
     image.save(image_path)
