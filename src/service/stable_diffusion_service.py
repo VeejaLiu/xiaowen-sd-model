@@ -124,7 +124,7 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
         # generator=generator,
         guidance_scale=7,
         num_inference_steps=30,
-        num_images_per_prompt=1,
+        num_images_per_prompt=4,
     ).images
     image = images[0]
     end_time = datetime.now()
