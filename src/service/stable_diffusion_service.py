@@ -126,16 +126,22 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
         num_inference_steps=30,
         num_images_per_prompt=4,
     ).images
-    image = images[0]
     end_time = datetime.now()
     print(f"[draw_with_prompt] Done drawing. Elapsed time: {end_time - start_time}")
 
-    # 保存图像，添加时间戳，返回图像路径
-    image_path = f"src/service/result/image_{datetime.now().timestamp()}.png"
-    # save image, add timestamp
-    image.save(image_path)
-    print(f"[draw_with_prompt] Saved image to {image_path}")
-    return image_path
+    # 保存图像
+    image_paths = []
+    random_str = datetime.now().timestamp()
+    print(f"[draw_with_prompt] image prefix: {random_str}")
+    for i in range(len(images)):
+        image = images[i]
+        # 结果名称 = image_时间戳.png
+        image_path = f"src/service/result/image_{random_str}_{i}.png"
+        image.save(image_path)
+        print(f"[draw_with_prompt] Saved image to {image_path}")
+        image_paths.append(image_path)
+
+    return image_paths
 
 
 if __name__ == '__main__':
