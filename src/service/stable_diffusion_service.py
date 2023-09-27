@@ -7,6 +7,7 @@ import torch
 import torchvision
 from diffusers import StableDiffusionPipeline
 from diffusers import DPMSolverMultistepScheduler
+from diffusers import ControlNetModel
 
 from src.client.BaiduTranslator import translate
 
