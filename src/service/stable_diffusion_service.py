@@ -81,9 +81,11 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
     # prompt = f"{prefix_prompt_str}, ({prompt}:1.6)"
     prompt = f"{prompt}, {prefix_prompt_str}".lower()
     print(f"[draw_with_prompt] Final prompt: '{prompt}'.")
-    print(f"[draw_with_prompt] Final length: {len(prompt)}")
+    print(f"[draw_with_prompt] Final prompt length: {len(prompt)}")
+    print(f"[draw_with_prompt] Final prompt tokens length: {len(prompt.split(' '))}")
     print(f"[draw_with_prompt] Final negative prompt: '{negative_prompt}'.")
-    print(f"[draw_with_prompt] Final negative length: {len(negative_prompt)}")
+    print(f"[draw_with_prompt] Final negative prompt length: {len(negative_prompt)}")
+    print(f"[draw_with_prompt] Final negative prompt tokens length: {len(negative_prompt.split(' '))}")
 
     # 将文本转换为张量，便于输入长文本
     prompt_embeds = compel(prompt)
