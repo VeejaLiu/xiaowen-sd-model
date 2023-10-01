@@ -15,15 +15,15 @@ print(os.get_exec_path())
 
 # 加载模型，加载stable diffusion XL 模型
 pipe = StableDiffusionXLPipeline.from_single_file(
-    """src//service//models//v1-5-pruned-emaonly.safetensors""",
+    """src//service//models//sd_xl_base_1.0.safetensors""",
     torch_dtype=torch.float16,
     load_safety_checker=None,
 )
 
 # 设置采样方法
-pipe.scheduler = DPMSolverMultistepScheduler.from_config(
-    pipe.scheduler.config
-)
+# pipe.scheduler = DPMSolverMultistepScheduler.from_config(
+#     pipe.scheduler.config
+# )
 
 # 使用Compel来处理文本，将文本转换为模型可以理解的张量
 compel = Compel(tokenizer=pipe.tokenizer, text_encoder=pipe.text_encoder)
@@ -64,7 +64,7 @@ prefix_prompt_str = ", ".join(prefix_prompt)
 # negative_prompt_str = ", ".join(negative_prompt)
 
 
-def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
+def draw_with_prompt_in_xl(prompt: str = "", negative_prompt: str = "", openPrefix: bool = False):
     # Prompt预处理，
     prompt = prompt.strip()
     if prompt is None or prompt == "":
@@ -74,7 +74,10 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
     prompt = translate(prompt)
     print(f"[draw_with_prompt] translated prompt: '{prompt}'.")
     # prompt = f"{prefix_prompt_str}, ({prompt}:1.6)"
-    prompt = f"{prompt}, {prefix_prompt_str}".lower()
+    if openPrefix:
+        prompt = f"{prompt}, {prefix_prompt_str}".lower()
+    else:
+        prompt = f"{prompt}".lower()
     print(f"[draw_with_prompt] Final prompt: '{prompt}'.")
     print(f"[draw_with_prompt] Final prompt length: {len(prompt)}")
     print(f"[draw_with_prompt] Final prompt tokens length: {len(prompt.split(' '))}")
@@ -83,8 +86,8 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
     print(f"[draw_with_prompt] Final negative prompt tokens length: {len(negative_prompt.split(' '))}")
 
     # 将文本转换为张量，便于输入长文本
-    prompt_embeds = compel(prompt)
-    negative_prompt_embeds = compel(negative_prompt)
+    conditioning, pooled = compel([prompt, prompt])
+    # negative_prompt_embeds = compel(negative_prompt)
 
     start_time = datetime.now()
 
@@ -110,16 +113,17 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
     # cross_attention_kwargs:控制交叉注意力机制的超参数。
     # guidance_rescale:重新缩放损失函数以控制稳定性。
     images = pipe(
-        # prompt=prompt,
+        prompt=prompt,
         # negative_prompt=negative_prompt_str,
-        prompt_embeds=prompt_embeds,
-        negative_prompt_embeds=negative_prompt_embeds,
+        # prompt_embeds=conditioning,
+        # pooled_prompt_embeds=pooled,
+        # negative_prompt_embeds=negative_prompt_embeds,
         # height=768,
         # width=512,
         # generator=generator,
-        guidance_scale=7,
+        # guidance_scale=7,
         num_inference_steps=30,
-        num_images_per_prompt=4,
+        num_images_per_prompt=1,
     ).images
     end_time = datetime.now()
     print(f"[draw_with_prompt] Done drawing. Elapsed time: {end_time - start_time}")
@@ -140,4 +144,4 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
 
 
 if __name__ == '__main__':
-    draw_with_prompt()
+    draw_with_prompt_in_xl()
