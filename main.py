@@ -6,7 +6,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from starlette.responses import FileResponse
 
-from src.service.stable_diffusion_service import draw_with_prompt
+# from src.service.stable_diffusion_service import draw_with_prompt
+from src.service.stable_diffusion_xl.stable_diffusion_xl import draw_with_prompt_in_xl
 
 app = FastAPI()
 
@@ -31,13 +32,15 @@ async def health_check(body=None):
 class DrawRequest(BaseModel):
     prompt: str = None
     negative_prompt: str = None
+    openPrefix: bool = False
 
 
 # draw an image
 @app.post("/draw")
 async def draw(body: DrawRequest = None):
     logging.info(f"""[/draw]""")
-    image_path = draw_with_prompt(body.prompt, body.negative_prompt)
+    # image_path = draw_with_prompt(body.prompt, body.negative_prompt)
+    image_path = draw_with_prompt_in_xl(body.prompt, body.negative_prompt, body.openPrefix)
     # image_path = 'src/service/result/image.jpg'
     return FileResponse(image_path)
 
