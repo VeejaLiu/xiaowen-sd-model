@@ -3,11 +3,13 @@ import time
 import random
 from hashlib import md5
 
+from env_config import BAIDU_TRANSLATE_CONFIG
+
 # Set your own appid/appkey.
-appid = '20191210000364692'
-appkey = '9YtnRnV1x6NKVlufaiFc'
-endpoint = 'http://api.fanyi.baidu.com'
-path = '/api/trans/vip/translate'
+appid = BAIDU_TRANSLATE_CONFIG['APP_ID']
+appkey = BAIDU_TRANSLATE_CONFIG['APP_KEY']
+endpoint = BAIDU_TRANSLATE_CONFIG['ENDPOINT']
+path = BAIDU_TRANSLATE_CONFIG['PATH']
 url = endpoint + path
 headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
