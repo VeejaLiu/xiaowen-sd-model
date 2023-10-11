@@ -7,7 +7,7 @@ import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from src.client.Minio import put_in_minio
+from src.client.Minio import put_in_minio, MINIO_URL
 
 # from src.service.stable_diffusion_service import draw_with_prompt
 # from src.service.stable_diffusion_xl.stable_diffusion_xl import draw_with_prompt_in_xl
@@ -69,7 +69,7 @@ async def draw(body: DrawRequest = None):
         image_object_name = f"{time_string}_{i + 1}_{image}"
         result = put_in_minio(image_object_name, image_path)
         logger.info(f"[draw] Saved image to {result}")
-        result_paths.append(result)
+        result_paths.append('http://' + MINIO_URL + result)
 
     logger.info(f"[draw] Done drawing.")
     return {
