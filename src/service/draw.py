@@ -1,20 +1,6 @@
-from enum import Enum
-
+from src.constant.TattooStyles import TattooStyles
 from src.lib.logger import logger
-
-
-class TattooStyles(Enum):
-    BLACK_WORK = 1
-    DOT_WORK = 2
-    GEOMETRIC = 3
-    WATERCOLOR = 4
-    REALISM = 5
-    NEO_TRADITIONAL = 6
-    NEW_SCHOOL = 7
-    JAPANESE = 8
-    TRIBAL = 9
-    LETTERING = 10
-    TRASH_POLKA = 11
+from src.service.prompt import handle_prompt
 
 
 async def draw_with_prompt(prompt: str, style: TattooStyles):
@@ -22,8 +8,10 @@ async def draw_with_prompt(prompt: str, style: TattooStyles):
     if style is None or style not in TattooStyles:
         logger.info(f"[draw_with_prompt] Using default style: {TattooStyles.BLACK_WORK}")
         style = TattooStyles.BLACK_WORK
-
     logger.info(f"[draw_with_prompt] Drawing with prompt: {prompt}, style: {style}")
+
+    # handle prompt
+    prompt = handle_prompt(style, prompt)
 
     # result_paths = []
     #
