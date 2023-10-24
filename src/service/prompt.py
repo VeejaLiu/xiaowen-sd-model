@@ -96,6 +96,6 @@ prompt_style_switch = {
 # 处理Prompt
 def handle_prompt(style: TattooStyles, prompt: str):
     # switch style
-    prompt = prompt_style_switch[style](prompt)
-
+    new_prompt = prompt_style_switch[style](prompt)
+    return new_prompt
     pass
