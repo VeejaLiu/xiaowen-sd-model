@@ -74,8 +74,16 @@ def handle_prompt_lettering(prompt):
 # 处理Prompt - Trash Polka, 垃圾波尔卡
 def handle_prompt_trash_polka(prompt):
     # Trash Polka, 垃圾波尔卡
-    trash_polka = "chaotic, graffiti, black and white, red, imagery, broken, text, tattoo, abstract, fragmented, meaning"
-    return trash_polka + prompt
+    # trash_polka = "chaotic, graffiti, imagery, broken, text, tattoo, abstract, fragmented, meaning"
+    # chaotic: 混乱的
+    # graffiti: 涂鸦
+    # imagery: 意象
+    # broken: 破碎的
+    # abstract: 抽象的
+    # fragmented: 碎片化的
+    # meaning: 意义
+    final_prompt = "tattoo_design, chaotic, graffiti, imagery, broken, abstract, fragmented, meaning"
+    return f"""{prompt}, (tattoo_design:1.2), chaotic, graffiti, imagery, broken, abstract, fragmented, meaning, hd, 8k, blurry dreamy background, beautiful pictures"""
 
 
 prompt_style_switch = {
