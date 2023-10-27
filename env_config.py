@@ -5,6 +5,10 @@ BAIDU_TRANSLATE_CONFIG = {
     "PATH": '/api/trans/vip/translate'
 }
 
+SD_API_CONFIG = {
+    "URL": 'http://123.60.97.192:8080/sdapi/v1/txt2img',
+}
+
 MINIO_CONFIG = {
     "MINIO_ENDPOINT": '127.0.0.1',
     "MINIO_PORT": 9000,
