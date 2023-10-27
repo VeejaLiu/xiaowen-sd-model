@@ -83,7 +83,10 @@ def handle_prompt_trash_polka(prompt):
     # fragmented: 碎片化的
     # meaning: 意义
     final_prompt = "tattoo_design, chaotic, graffiti, imagery, broken, abstract, fragmented, meaning"
-    return f"""{prompt}, (tattoo_design:1.2), chaotic, graffiti, imagery, broken, abstract, fragmented, meaning, hd, 8k, blurry dreamy background, beautiful pictures"""
+    return (f"{prompt}, "
+            f"(tattoo_design:1.2), "
+            f"chaotic, graffiti, imagery, broken, abstract, fragmented, meaning, "
+            f"hd, 8k, blurry dreamy background, beautiful pictures")
 
 
 prompt_style_switch = {
