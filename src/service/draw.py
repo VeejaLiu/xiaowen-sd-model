@@ -20,11 +20,20 @@ async def draw_with_prompt(prompt: str, style: TattooStyles):
 
     # handle prompt
     new_prompt = handle_prompt(style, prompt)
+    negative_prompt = (f"nsfw, worst quality, low quality, normal quality, lowresolution, low resolution, "
+                       f"poor anatomical structure, poor hand, text, errors, missing fingers, multiple fingers, "
+                       f"few fingers, cropped, worst quality, low quality, normal quality, jpeg artifacts, "
+                       f"signature, watermark, username, blurry, exposed, nipple, penis, penis, vagina, anus, "
+                       f"underwear,Breast cleavage, sexy clothing,Not wearing clothes, boobs, Naked chest,"
+                       f"nipple protrusion,expose the body")
     logger.info(f"[draw_with_prompt] Final prompt: {new_prompt}")
 
     url = SD_API_CONFIG['URL']
     headers = {"content-type": "application/json"}
-    payload = {'prompt': new_prompt}
+    payload = {
+        'prompt': new_prompt,
+        'negative_prompt': negative_prompt
+    }
     response = requests.request("POST", url, json=payload, headers=headers)
     response.raise_for_status()
     result = response.json()
