@@ -15,7 +15,8 @@ print(os.get_exec_path())
 
 # 加载模型
 pipe = StableDiffusionPipeline.from_single_file(
-    """src//service//models//path""",  # TODO: 修改为自己的模型路径
+    """src//service//models//revAnimated_v122EOL.safetensors""",
+    # """src//service//models//v1-5-pruned-emaonly.safetensors""",
     # transformers=[
     #     torchvision.transforms.Resize(512),
     # ],
@@ -25,20 +26,23 @@ pipe = StableDiffusionPipeline.from_single_file(
     cache_dir='./models/')
 
 # 设置采样方法
-# pipe.scheduler = DPMSolverMultistepScheduler.from_config(
-#     pipe.scheduler.config
-# )
+pipe.scheduler = DPMSolverMultistepScheduler.from_config(
+    pipe.scheduler.config
+)
 
 # 使用Compel来处理文本，将文本转换为模型可以理解的张量
 compel = Compel(tokenizer=pipe.tokenizer, text_encoder=pipe.text_encoder)
 
-pipe.unet.load_attn_procs(
-    """src//service//models//lora_model_path""",  # TODO: 修改为自己的模型路径
-)
 pipe = pipe.to("cuda")
+# pipe.load_lora_weights(
+#     # """src//service//models//lora//BLTA2.safetensors""",
+#     """src//service//models//lora//b1nk3(0.85-1)CIVIT.safetensors""",
+# )
+# pipe.fuse_lora(lora_scale=0.9)
 
 
-def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
+
+def draw_with_prompt_with_lora(prompt: str = "", negative_prompt: str = ""):
     # Prompt预处理，
     prompt = prompt.strip()
     if prompt is None or prompt == "":
@@ -64,7 +68,7 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
     start_time = datetime.now()
 
     # generator 的作用是控制生成过程的随机性
-    generator = torch.Generator(device="cuda").manual_seed(8)
+    generator = torch.Generator(device="cuda").manual_seed(739703152)
 
     images = pipe(
         # prompt=prompt,
@@ -75,8 +79,9 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
         # width=512,
         generator=generator,
         guidance_scale=7,
-        num_inference_steps=30,
-        num_images_per_prompt=4,
+        num_inference_steps=50,
+        num_images_per_prompt=1,
+        # cross_attention_kwargs={"scale": 0.3},
     ).images
     end_time = datetime.now()
     print(f"[draw_with_prompt] Done drawing. Elapsed time: {end_time - start_time}")
@@ -97,4 +102,4 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
 
 
 if __name__ == '__main__':
-    draw_with_prompt()
+    draw_with_prompt_with_lora()

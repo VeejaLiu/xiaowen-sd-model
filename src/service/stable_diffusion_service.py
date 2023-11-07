@@ -4,19 +4,20 @@ from datetime import datetime
 from compel import Compel
 
 import torch
-import torchvision
+# import torchvision
 from diffusers import StableDiffusionPipeline
 from diffusers import DPMSolverMultistepScheduler
-from diffusers import ControlNetModel
+# from diffusers import ControlNetModel
 
-from src.client.BaiduTranslator import translate
+# from src.client.BaiduTranslator import translate
 
 print(os.get_exec_path())
 
 # 加载模型
 pipe = StableDiffusionPipeline.from_single_file(
     # """src//service//models//v2-1_768-ema-pruned.ckpt""",
-    """src//service//models//v1-5-pruned-emaonly.safetensors""",
+    # """src//service//models//v1-5-pruned-emaonly.safetensors""",
+    """src//service//models//anything-v5-PrtRE.safetensors""",
     # """src//service//models//ghostmix_v20Bakedvae.safetensors""",
     # transformers=[
     #     torchvision.transforms.Resize(512),
@@ -33,6 +34,8 @@ pipe.scheduler = DPMSolverMultistepScheduler.from_config(
 
 # 使用Compel来处理文本，将文本转换为模型可以理解的张量
 compel = Compel(tokenizer=pipe.tokenizer, text_encoder=pipe.text_encoder)
+
+pipe.enable_xformers_memory_efficient_attention()
 
 pipe = pipe.to("cuda")
 
@@ -70,17 +73,17 @@ prefix_prompt_str = ", ".join(prefix_prompt)
 # negative_prompt_str = ", ".join(negative_prompt)
 
 
-def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
+def draw_with_prompt(prompt: str = "", negative_prompt: str = "", open_prefix: bool = False) -> str:
     # Prompt预处理，
     prompt = prompt.strip()
     if prompt is None or prompt == "":
         print(f"[draw_with_prompt] No prompt provided, return demo image")
         return f"src/service/result/image.jpg"
     print(f"[draw_with_prompt] input prompt: '{prompt}'.")
-    prompt = translate(prompt)
-    print(f"[draw_with_prompt] translated prompt: '{prompt}'.")
-    # prompt = f"{prefix_prompt_str}, ({prompt}:1.6)"
-    prompt = f"{prompt}, {prefix_prompt_str}".lower()
+    if open_prefix:
+        prompt = f"{prefix_prompt_str}, {prompt}".lower()
+    else:
+        prompt = f"{prompt}".lower()
     print(f"[draw_with_prompt] Final prompt: '{prompt}'.")
     print(f"[draw_with_prompt] Final prompt length: {len(prompt)}")
     print(f"[draw_with_prompt] Final prompt tokens length: {len(prompt.split(' '))}")
@@ -95,7 +98,7 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
     start_time = datetime.now()
 
     # generator 的作用是控制生成过程的随机性
-    generator = torch.Generator(device="cuda").manual_seed(8)
+    # generator = torch.Generator(device="cuda").manual_seed(-1)
 
     # prompt: 输入的文本提示,控制生成图像的主题和内容。
     # height: 生成图像的高度大小。
@@ -124,7 +127,7 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
         # width=512,
         # generator=generator,
         guidance_scale=7,
-        num_inference_steps=30,
+        num_inference_steps=20,
         num_images_per_prompt=4,
     ).images
     end_time = datetime.now()
@@ -136,8 +139,9 @@ def draw_with_prompt(prompt: str = "", negative_prompt: str = ""):
     print(f"[draw_with_prompt] image prefix: {random_str}")
     for i in range(len(images)):
         image = images[i]
+        image_name = f"{random_str}_{i}.jpg"
         # 结果名称 = image_时间戳.png
-        image_path = f"src/service/result/image_{random_str}_{i}.png"
+        image_path = f"src/service/result/{image_name}"
         image.save(image_path)
         print(f"[draw_with_prompt] Saved image to {image_path}")
         image_paths.append(image_path)

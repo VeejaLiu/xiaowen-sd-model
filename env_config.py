@@ -6,14 +6,14 @@ BAIDU_TRANSLATE_CONFIG = {
 }
 
 SD_API_CONFIG = {
-    "URL": 'http://123.60.97.192:8080/sdapi/v1/txt2img',
+    "URL": 'http://127.0.0.1:7860/sdapi/v1/txt2img',
 }
 
 MINIO_CONFIG = {
-    "MINIO_ENDPOINT": '127.0.0.1',
-    "MINIO_PORT": 9000,
+    "MINIO_ENDPOINT": '123.60.97.192',
+    "MINIO_PORT": 9001,
     "MINIO_USE_SSL": False,
-    "MINIO_ACCESS_KEY": 'fwxPczjUDixUPv7AdzmB',
-    "MINIO_SECRET_KEY": 'GfVWDCSa2BRmrkLaNbYRWn6pruybI0ZlBigD7H5E',
-    "MINIO_BUCKET_NAME": 'pictures',
+    "MINIO_ACCESS_KEY": 'p1Bs9GNInn9elxECOkHW',
+    "MINIO_SECRET_KEY": 'FwXnFO9duLORKuFTolTxuf1sFK2I0jjwnipJ0XDS',
+    "MINIO_BUCKET_NAME": 'pic',
 }

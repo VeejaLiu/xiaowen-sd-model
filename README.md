@@ -43,3 +43,9 @@ pip install xformers==0.0.21
 pip install torch==2.0.1+cu118 torchvision==0.15.2+cu118 torchaudio==2.0.2 --index-url https://download.pytorch.org/whl/cu118
 
 ```
+
+## minio docker 搭建：
+in-one-line:
+```shell
+docker run -p 9000:9000 -p 9001:9001 -v G:\docker-data\minio\data:/data minio/minio server /data --console-address ":9001"
+```
