@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class TattooStyles(Enum):
+    NONE = 0
     BLACK_WORK = 1
     DOT_WORK = 2
     GEOMETRIC = 3

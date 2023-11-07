@@ -1,6 +1,14 @@
 from src.constant.TattooStyles import TattooStyles
 
 
+# 处理Prompt - None, 无
+def handle_prompt_none(prompt):
+    # None, 无
+    return (f"{prompt}, "
+            f"(tattoo_design:1.2), "
+            f"hd, 8k, white background, beautiful pictures")
+
+
 # 处理Prompt - Black Work, 黑线
 def handle_prompt_black_work(prompt):
     # Black Work, 黑线
@@ -101,6 +109,7 @@ def handle_prompt_trash_polka(prompt):
 
 
 prompt_style_switch = {
+    TattooStyles.NONE: handle_prompt_none,  # 0
     TattooStyles.BLACK_WORK: handle_prompt_black_work,  # 1
     TattooStyles.DOT_WORK: handle_prompt_dot_work,  # 2
     TattooStyles.GEOMETRIC: handle_prompt_geometric,  # 3
