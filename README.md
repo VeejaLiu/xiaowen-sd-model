@@ -33,3 +33,13 @@ uvicorn main:app --reload --host 127.0.0.1 --port 10102
 ```shell
 pip freeze > requirements.txt
 ```
+
+## 依赖版本控制
+xformers 和 torch 的版本需要一致，否则会报错，目前使用的版本是：
+
+```shell
+pip install xformers==0.0.21
+
+pip install torch==2.0.1+cu118 torchvision==0.15.2+cu118 torchaudio==2.0.2 --index-url https://download.pytorch.org/whl/cu118
+
+```
