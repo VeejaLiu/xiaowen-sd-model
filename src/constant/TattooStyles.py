@@ -2,17 +2,16 @@ from enum import Enum
 
 
 class TattooStyles(Enum):
-    NONE = 0
-    BLACK_WORK = 1
-    DOT_WORK = 2
-    GEOMETRIC = 3
-    WATERCOLOR = 4
-    REALISM = 5
-    NEO_TRADITIONAL = 6
-    NEW_SCHOOL = 7
-    JAPANESE = 8
-    TRIBAL = 9
-    LETTERING = 10
-    TRASH_POLKA = 11
+    DOT_WORK = 1
+    BLACK_WORK = 2
+    MINIMALIST = 3
+    GEOMETRIC = 4
+    OLD_SCHOOL = 5
+    NEW_SCHOOL = 6
+    JAPANESE = 7
+    ANIME = 8
+    REALISM = 9
+    SURREALISM = 10
+    TRIBAL = 11
 
 
