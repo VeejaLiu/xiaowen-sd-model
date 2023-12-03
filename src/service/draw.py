@@ -14,8 +14,8 @@ from src.service.prompt import handle_prompt
 async def draw_with_prompt(prompt: str, style: TattooStyles):
     # If style is not specified, use default style
     if style is None or style not in TattooStyles:
-        logger.info(f"[draw_with_prompt] Using default style: {TattooStyles.BLACK_WORK}")
-        style = TattooStyles.BLACK_WORK
+        logger.info(f"[draw_with_prompt] Using default style: {TattooStyles.DOT_WORK}")
+        style = TattooStyles.DOT_WORK
     logger.info(f"[draw_with_prompt] Drawing with prompt: {prompt}, style: {style}")
 
     # handle prompt
@@ -25,7 +25,8 @@ async def draw_with_prompt(prompt: str, style: TattooStyles):
                        f"few fingers, cropped, worst quality, low quality, normal quality, jpeg artifacts, "
                        f"signature, watermark, username, blurry, exposed, nipple, penis, penis, vagina, anus, "
                        f"underwear,Breast cleavage, sexy clothing,Not wearing clothes, boobs, Naked chest,"
-                       f"nipple protrusion,expose the body")
+                       f"nipple protrusion,expose the body,"
+                       f"paper, painting, pen, pencil")
     logger.info(f"[draw_with_prompt] Final prompt: {new_prompt}")
 
     url = SD_API_CONFIG['URL']
