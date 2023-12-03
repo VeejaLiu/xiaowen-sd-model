@@ -89,10 +89,10 @@ async def draw_with_prompt(prompt: str, style: TattooStyles):
         'prompt': new_prompt,
         'negative_prompt': negative_prompt,
         'batch_size': 4,
-        'cfg_scale': 7.5,
-        'steps': 30,
-        "width": 768,
-        "height": 768,
+        'cfg_scale': 1,
+        'steps': 1,
+        "width": 512,
+        "height": 512,
 
     }
     response = requests.request("POST", url, json=payload, headers=headers)
