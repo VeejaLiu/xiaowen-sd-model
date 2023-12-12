@@ -89,8 +89,8 @@ async def draw_with_prompt(prompt: str, style: TattooStyles):
         'prompt': new_prompt,
         'negative_prompt': negative_prompt,
         'batch_size': 4,
-        'cfg_scale': 1,
-        'steps': 1,
+        'cfg_scale': 7,
+        'steps': 20,
         "width": 512,
         "height": 512,
 
