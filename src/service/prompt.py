@@ -21,9 +21,11 @@ quality_prompt = ("hd,"
 def handle_prompt_dot_work(prompt):
     # Dot Work, 点刺
     return (f"{prompt}, "
-            f"{tattoo_prompt}"
-            f"dot, dotwork, detail, black and white, "
-            f"{quality_prompt}")
+            # f"{tattoo_prompt}"
+            f"<lora:dotwork_sd15:1>, "
+            f"dotwork, solo, simple background, white background, "
+            # f"{quality_prompt}"
+            )
 
 
 # 处理Prompt - Black Work, 纯黑
