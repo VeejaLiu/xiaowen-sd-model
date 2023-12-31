@@ -19,15 +19,13 @@ async def draw_with_prompt(prompt: str, style: TattooStyles):
     logger.info(f"[draw_with_prompt] Drawing with prompt: {prompt}, style: {style}")
 
     # handle prompt
-    new_prompt = handle_prompt(style, prompt)
-    negative_prompt = (f"nsfw, worst quality, low quality, normal quality, lowresolution, low resolution, "
-                       f"poor anatomical structure, poor hand, text, errors, missing fingers, multiple fingers, "
-                       f"few fingers, cropped, worst quality, low quality, normal quality, jpeg artifacts, "
-                       f"signature, watermark, username, blurry, exposed, nipple, penis, penis, vagina, anus, "
-                       f"underwear,Breast cleavage, sexy clothing,Not wearing clothes, boobs, Naked chest,"
-                       f"nipple protrusion,expose the body,"
-                       f"paper, painting, pen, pencil")
-    logger.info(f"[draw_with_prompt] Final prompt: {new_prompt}")
+    style_config = handle_prompt(style, prompt)
+
+    prompt = style_config['prompt']
+    negative_prompt = style_config['negative_prompt']
+    height = style_config['height']
+    width = style_config['width']
+    logger.info(f"[draw_with_prompt] Final prompt: {prompt}, negative_prompt: {negative_prompt}, height: {height}, width: {width}")
 
     url = SD_API_CONFIG['URL']
     headers = {"content-type": "application/json"}
@@ -86,13 +84,13 @@ async def draw_with_prompt(prompt: str, style: TattooStyles):
     #   "alwayson_scripts": {}
     # }
     payload = {
-        'prompt': new_prompt,
+        'prompt': prompt,
         'negative_prompt': negative_prompt,
         'batch_size': 4,
         'cfg_scale': 7,
-        'steps': 20,
-        "width": 512,
-        "height": 512,
+        'steps': 28,
+        "width": width,
+        "height": height,
 
     }
     response = requests.request("POST", url, json=payload, headers=headers)
