@@ -2,24 +2,25 @@ from src.constant.TattooStyles import TattooStyles
 
 # 通用负面提示词
 general_negative_prompt = (
-    f"nsfw, "
-    f"worst quality, low quality, normal quality, lowresolution, low resolution, "
-    f"poor anatomical structure, poor hand, text, errors, missing fingers, multiple fingers, "
-    f"few fingers, cropped, worst quality, low quality, normal quality, jpeg artifacts, "
-    f"signature, watermark, username, blurry, exposed, nipple, penis, penis, vagina, anus, "
-    f"underwear,Breast cleavage, sexy clothing,Not wearing clothes, boobs, Naked chest,"
-    f"nipple protrusion,expose the body,"
-    f"paper, painting, pen, pencil"
+        ""
+        f"nsfw, "
+        + f"worst quality, low quality, normal quality, lowresolution, low resolution, "
+        # + f"poor anatomical structure, poor hand, text, errors, missing fingers, multiple fingers, "
+        # + f"few fingers, cropped, worst quality, low quality, normal quality, jpeg artifacts, "
+        + f"signature, watermark, username, blurry, exposed, nipple, penis, penis, vagina, anus, "
+    # + f"underwear,Breast cleavage, sexy clothing,Not wearing clothes, boobs, Naked chest,"
+    # + f"nipple protrusion,expose the body,"
+    # + f"paper, painting, pen, pencil"
 )
 
 # 画质固定提示词
 quality_prompt = (
-    "solo, "
-    "hd, "
-    "no background, ",
-    "white background, ",
-    "beautiful pictures, ",
-    "masterpiece"
+        "solo, "
+        # + "hd, "
+        + "no background, "
+        + "white background, "
+    # + "beautiful pictures, "
+    # + "masterpiece"
 )
 
 
@@ -27,20 +28,20 @@ quality_prompt = (
 def handle_prompt_dot_work(prompt):
     # 正向提示词
     positive_prompt = (
-        f"{prompt}, "
-        f"dotwork, ",  # trigger word
-        f"<lora:dotwork_for_dreamshaper8:1>, "
-        f"{quality_prompt}"
+            f"{prompt}, "
+            + f"dotwork, "  # trigger word
+            + f"<lora:dotwork_for_dreamshaper8:1>, "
+            + f"{quality_prompt}"
     )
     # 负向提示词
     negative_prompt = general_negative_prompt
     height = 512
     width = 512
     return {
-        positive_prompt: positive_prompt,
-        negative_prompt: negative_prompt,
-        height: height,
-        width: width
+        "positive_prompt": positive_prompt,
+        "negative_prompt": negative_prompt,
+        "height": height,
+        "width": width
     }
 
 
@@ -48,20 +49,20 @@ def handle_prompt_dot_work(prompt):
 def handle_prompt_black_work(prompt):
     # 正向提示词
     positive_prompt = (
-        f"{prompt}, "
-        f"blackgrey, monochrome, "  # trigger word
-        f"<lora:blackgrey-for-dreamshaper8:0.7>, "
-        f"{quality_prompt}"
+            f"{prompt}, "
+            + f"blackgrey, monochrome, "  # trigger word
+            + f"<lora:blackgrey-for-dreamshaper8:0.7>, "
+            + f"{quality_prompt}"
     )
     # 负向提示词
     negative_prompt = general_negative_prompt
     height = 512
     width = 512
     return {
-        positive_prompt: positive_prompt,
-        negative_prompt: negative_prompt,
-        height: height,
-        width: width
+        "positive_prompt": positive_prompt,
+        "negative_prompt": negative_prompt,
+        "height": height,
+        "width": width
     }
 
 
@@ -69,20 +70,21 @@ def handle_prompt_black_work(prompt):
 def handle_prompt_minimalist(prompt):
     # 正向提示词
     positive_prompt = (
-        f"{prompt}, "
-        f"minimalist, ",  # trigger word
-        f"<lora:minimalist-for-dreamshaper8:0.6>, "
-        f"{quality_prompt}"
+            f"{prompt}, "
+            + f"minimalist, minimal, lineart, "
+            # trigger word
+            + f"<lora:minimalist-for-dreamshaper8:0.6>, "
+            + f"{quality_prompt}"
     )
     # 负向提示词
     negative_prompt = general_negative_prompt
     height = 512
     width = 512
     return {
-        positive_prompt: positive_prompt,
-        negative_prompt: negative_prompt,
-        height: height,
-        width: width
+        "positive_prompt": positive_prompt,
+        "negative_prompt": negative_prompt,
+        "height": height,
+        "width": width
     }
 
 
@@ -90,20 +92,20 @@ def handle_prompt_minimalist(prompt):
 def handle_prompt_geometric(prompt):
     # 正向提示词
     positive_prompt = (
-        f"{prompt}, "
-        f"geometric, ",  # trigger word
-        f"<lora:geo-5-for-dreamshaper:0.6>, "
-        f"{quality_prompt}"
+            f"{prompt}, "
+            + f"geometric, "  # trigger word
+            + f"<lora:geo-5-for-dreamshaper:0.6>, "
+            + f"{quality_prompt}"
     )
     # 负向提示词
     negative_prompt = general_negative_prompt
     height = 640
     width = 512
     return {
-        positive_prompt: positive_prompt,
-        negative_prompt: negative_prompt,
-        height: height,
-        width: width
+        "positive_prompt": positive_prompt,
+        "negative_prompt": negative_prompt,
+        "height": height,
+        "width": width
     }
 
 
@@ -111,20 +113,20 @@ def handle_prompt_geometric(prompt):
 def handle_prompt_old_school(prompt):
     # 正向提示词
     positive_prompt = (
-        f"{prompt}, "
-        f"oldschooltattoo, old school",  # trigger word
-        f"<lora:oldschool-for-dreamshaper8:0.8>, "
-        f"{quality_prompt}"
+            f"{prompt}, "
+            + f"oldschooltattoo, old school, "  # trigger word
+            + f"<lora:oldschool-for-dreamshaper8:0.8>, "
+            + f"{quality_prompt}"
     )
     # 负向提示词
     negative_prompt = general_negative_prompt
     height = 640
     width = 512
     return {
-        positive_prompt: positive_prompt,
-        negative_prompt: negative_prompt,
-        height: height,
-        width: width
+        "positive_prompt": positive_prompt,
+        "negative_prompt": negative_prompt,
+        "height": height,
+        "width": width
     }
 
 
@@ -132,20 +134,20 @@ def handle_prompt_old_school(prompt):
 def handle_prompt_new_school(prompt):
     # 正向提示词
     positive_prompt = (
-        f"{prompt}, "
-        f"new school, ",  # trigger word
-        f"<lora:ns1-for-dreamshaper:0.8>, "
-        f"{quality_prompt}"
+            f"{prompt}, "
+            + f"new school, "  # trigger word
+            + f"<lora:ns1-for-dreamshaper:0.8>, "
+            + f"{quality_prompt}"
     )
     # 负向提示词
     negative_prompt = general_negative_prompt
     height = 512
     width = 512
     return {
-        positive_prompt: positive_prompt,
-        negative_prompt: negative_prompt,
-        height: height,
-        width: width
+        "positive_prompt": positive_prompt,
+        "negative_prompt": negative_prompt,
+        "height": height,
+        "width": width
     }
 
 
@@ -153,20 +155,20 @@ def handle_prompt_new_school(prompt):
 def handle_prompt_japanese(prompt):
     # 正向提示词
     positive_prompt = (
-        f"{prompt}, "
-        f"japanese, tattoo, japanese pattern, totem, ",  # trigger word
-        f"<lora:japanese-tattoo:0.5>, "
-        f"{quality_prompt}"
+            f"{prompt}, "
+            + f"japanese, tattoo, japanese pattern, totem, "  # trigger word
+            + f"<lora:japanese-tattoo:0.5>, "
+            + f"{quality_prompt}"
     )
     # 负向提示词
     negative_prompt = general_negative_prompt
     height = 640
     width = 512
     return {
-        positive_prompt: positive_prompt,
-        negative_prompt: negative_prompt,
-        height: height,
-        width: width
+        "positive_prompt": positive_prompt,
+        "negative_prompt": negative_prompt,
+        "height": height,
+        "width": width
     }
 
 
@@ -175,19 +177,19 @@ def handle_prompt_japanese(prompt):
 def handle_prompt_realism(prompt):
     # 正向提示词
     positive_prompt = (
-        f"{prompt}, "
-        f"realistic, detailed, design, realism, photo realistic, photo-realistic, photo-realism, greyscale, "
-        f"{quality_prompt}"
+            f"{prompt}, "
+            + f"realistic, detailed, design, realism, monochrome, lineart, "
+            + f"{quality_prompt}"
     )
     # 负向提示词
     negative_prompt = general_negative_prompt
     height = 512
     width = 512
     return {
-        positive_prompt: positive_prompt,
-        negative_prompt: negative_prompt,
-        height: height,
-        width: width
+        "positive_prompt": positive_prompt,
+        "negative_prompt": negative_prompt,
+        "height": height,
+        "width": width
     }
 
 
@@ -195,42 +197,42 @@ def handle_prompt_realism(prompt):
 def handle_prompt_trash_polka(prompt):
     # 正向提示词
     positive_prompt = (
-        f"{prompt}, "
-        f"tp, blood, ink, ",  # trigger word
-        f"<lora:tp3-for-dreamshaper:0.7>, "
-        f"{quality_prompt}"
+            f"{prompt}, "
+            + f"tp, blood, ink, "
+            + f"<lora:tp3-for-dreamshaper:0.7>, "
+            + f"{quality_prompt}"
     )
     # 负向提示词
     negative_prompt = general_negative_prompt
     height = 512
     width = 512
     return {
-        positive_prompt: positive_prompt,
-        negative_prompt: negative_prompt,
-        height: height,
-        width: width
+        "positive_prompt": positive_prompt,
+        "negative_prompt": negative_prompt,
+        "height": height,
+        "width": width
     }
-    
 
 
 # 处理Prompt - Tribal, 图腾
 def handle_prompt_tribal(prompt):
     # 正向提示词
     positive_prompt = (
-        f"{prompt}, "
-        f"tribal, ",  # trigger word
-        f"<lora:tribal-1-for-dreamshaper-000018:0.7>, "
-        f"{quality_prompt}"
-    )
+            f"{prompt}, "
+            + f"tribal, "
+            + f"<lora:tribal-1-for-dreamshaper-000018:0.7>, "
+            + f"{quality_prompt}")
+
     # 负向提示词
     negative_prompt = general_negative_prompt
     height = 512
     width = 512
+
     return {
-        positive_prompt: positive_prompt,
-        negative_prompt: negative_prompt,
-        height: height,
-        width: width
+        'positive_prompt': positive_prompt,
+        'negative_prompt': negative_prompt,
+        'height': height,
+        'width': width
     }
 
 
@@ -252,6 +254,4 @@ prompt_style_switch = {
 # 处理Prompt
 def handle_prompt(style: TattooStyles, prompt: str):
     # switch style
-    new_prompt = prompt_style_switch[style](prompt)
-    return new_prompt
-    pass
+    return prompt_style_switch[style](prompt)

@@ -21,11 +21,11 @@ async def draw_with_prompt(prompt: str, style: TattooStyles):
     # handle prompt
     style_config = handle_prompt(style, prompt)
 
-    prompt = style_config['prompt']
+    positive_prompt = style_config['positive_prompt']
     negative_prompt = style_config['negative_prompt']
     height = style_config['height']
     width = style_config['width']
-    logger.info(f"[draw_with_prompt] Final prompt: {prompt}, negative_prompt: {negative_prompt}, height: {height}, width: {width}")
+    logger.info(f"[draw_with_prompt] Final positive_prompt: {positive_prompt}, negative_prompt: {negative_prompt}, height: {height}, width: {width}")
 
     url = SD_API_CONFIG['URL']
     headers = {"content-type": "application/json"}
@@ -84,7 +84,7 @@ async def draw_with_prompt(prompt: str, style: TattooStyles):
     #   "alwayson_scripts": {}
     # }
     payload = {
-        'prompt': prompt,
+        'prompt': positive_prompt,
         'negative_prompt': negative_prompt,
         'batch_size': 4,
         'cfg_scale': 7,
