@@ -138,7 +138,8 @@ async def draw_with_prompt(prompt: str, style: TattooStyles):
 
         # 上传原图
         image_object_name = f"{time_string}_{i + 1}.png"
-        original_result = put_in_minio_by_file_object(image_object_name, image_data)
+        image_data_io = io.BytesIO(image_data)
+        original_result = put_in_minio_by_file_object(image_object_name, image_data_io)
         logger.info(f"[draw_with_prompt] Saved image to {result}")
 
         # 上传缩略图
