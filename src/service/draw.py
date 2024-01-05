@@ -146,10 +146,10 @@ async def draw_with_prompt(prompt: str, style: TattooStyles):
         thumbnail_object_name = f"{time_string}_{i + 1}_thumbnail.png"
         thumbnail_result = put_in_minio_by_file_object(thumbnail_object_name, thumbnail_data)
         logger.info(f"[draw_with_prompt] Saved thumbnail to {result}")
-
+        
         result_paths.append({
-            'original': original_result,
-            'thumbnail': thumbnail_result
+            'original': 'http://' + MINIO_URL + original_result,
+            'thumbnail': 'http://' + MINIO_URL + thumbnail_result
         })
 
     logger.info(f"[draw_with_prompt] Done drawing.")
