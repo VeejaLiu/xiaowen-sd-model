@@ -1,6 +1,7 @@
 import base64
 import io
 from datetime import datetime
+from PIL import Image
 
 import requests
 
@@ -9,6 +10,30 @@ from src.client.Minio import put_in_minio_by_file_path, MINIO_URL, put_in_minio_
 from src.constant.TattooStyles import TattooStyles
 from src.lib.logger import logger
 from src.service.prompt import handle_prompt
+
+
+def create_thumbnail(image_data, original_size=(512, 512), thumbnail_max_size=128):
+    """
+    创建并返回一个缩略图的BytesIO对象
+    :param image_data: 原图的BytesIO对象
+    :param original_size: 原图的尺寸, 默认为512x512
+    :param thumbnail_max_size: 缩略图的最大边尺寸, 默认为128，即最大边为128
+    """
+    # 读取原图
+    image = Image.open(image_data)
+    # 计算缩略图的尺寸
+    thumbnail_size = (thumbnail_max_size, thumbnail_max_size)
+    if image.size[0] > image.size[1]:
+        thumbnail_size = (thumbnail_max_size, int(thumbnail_max_size * image.size[1] / image.size[0]))
+    else:
+        thumbnail_size = (int(thumbnail_max_size * image.size[0] / image.size[1]), thumbnail_max_size)
+    # 生成缩略图
+    image.thumbnail(thumbnail_size)
+    # 生成缩略图的BytesIO对象
+    thumbnail_data = io.BytesIO()
+    image.save(thumbnail_data, format='PNG')
+    thumbnail_data.seek(0)
+    return thumbnail_data
 
 
 async def draw_with_prompt(prompt: str, style: TattooStyles):
@@ -25,7 +50,8 @@ async def draw_with_prompt(prompt: str, style: TattooStyles):
     negative_prompt = style_config['negative_prompt']
     height = style_config['height']
     width = style_config['width']
-    logger.info(f"[draw_with_prompt] Final prompt: {prompt}, negative_prompt: {negative_prompt}, height: {height}, width: {width}")
+    logger.info(
+        f"[draw_with_prompt] Final prompt: {prompt}, negative_prompt: {negative_prompt}, height: {height}, width: {width}")
 
     url = SD_API_CONFIG['URL']
     headers = {"content-type": "application/json"}
@@ -105,11 +131,25 @@ async def draw_with_prompt(prompt: str, style: TattooStyles):
     # for image_base64 in images_data:
     for i in range(len(images_data)):
         image_data = base64.b64decode(images_data[i])
-        image_data = io.BytesIO(image_data)
+        image_data_io = io.BytesIO(image_data)
+
+        # 生成缩略图
+        thumbnail_data = create_thumbnail(image_data_io, original_size=(width, height), thumbnail_max_size=128)
+
+        # 上传原图
         image_object_name = f"{time_string}_{i + 1}.png"
-        result = put_in_minio_by_file_object(image_object_name, image_data)
+        original_result = put_in_minio_by_file_object(image_object_name, image_data)
         logger.info(f"[draw_with_prompt] Saved image to {result}")
-        result_paths.append('http://' + MINIO_URL + result)
+
+        # 上传缩略图
+        thumbnail_object_name = f"{time_string}_{i + 1}_thumbnail.png"
+        thumbnail_result = put_in_minio_by_file_object(thumbnail_object_name, thumbnail_data)
+        logger.info(f"[draw_with_prompt] Saved thumbnail to {result}")
+
+        result_paths.append({
+            'original': original_result,
+            'thumbnail': thumbnail_result
+        })
 
     logger.info(f"[draw_with_prompt] Done drawing.")
     return result_paths
