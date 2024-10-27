@@ -1,4 +1,4 @@
-# xiaowen-generate-server
+# xiaowen-sd-model
 
 ## 项目介绍
 
@@ -7,6 +7,6 @@
 - [xiaowen-wechat-miniprogram](https://github.com/VeejaLiu/xiaowen-wechat-miniprogram)：微信小程序前端项目
 - [xiaowen-backend](https://github.com/VeejaLiu/xiaowen-backend)：后端项目
 - [xiaowen-BMC](https://github.com/VeejaLiu/xiaowen-BMC)：后台管理前端项目
-- （当前）[xiaowen-generate-server](https://github.com/VeejaLiu/xiaowen-generate-server)
+- （当前）[xiaowen-sd-model](https://github.com/VeejaLiu/xiaowen-sd-model)
   ：Stable diffusion 相关资源（模型、数据集等）
 
